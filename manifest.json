@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "Stockfish Lens",
+  "version": "1.0.0",
+  "description": "Ferramenta de estudo contra bots no Chess.com, com Stockfish local, variantes, avaliações e setas no tabuleiro.",
+  "minimum_chrome_version": "110",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-arrow-1": {
+      "suggested_key": "Alt+Shift+1",
+      "description": "Mostrar/ocultar a seta do melhor lance"
+    },
+    "toggle-arrow-2": {
+      "suggested_key": "Alt+Shift+2",
+      "description": "Mostrar/ocultar a seta do 2º melhor lance"
+    },
+    "toggle-arrow-3": {
+      "suggested_key": "Alt+Shift+3",
+      "description": "Mostrar/ocultar a seta do 3º melhor lance"
+    },
+    "toggle-all-arrows": {
+      "suggested_key": "Alt+Shift+0",
+      "description": "Mostrar/ocultar as três melhores setas"
+    }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Stockfish Lens",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "engine.html",
+        "engine.js",
+        "engine/*",
+        "fonts/*.woff2"
+      ],
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

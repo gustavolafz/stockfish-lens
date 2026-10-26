@@ -1,0 +1,4 @@
+[submodule "vendor/stockfish.js"]
+	path = vendor/stockfish.js
+	url = https://github.com/nmrugg/stockfish.js.git
+	shallow = true

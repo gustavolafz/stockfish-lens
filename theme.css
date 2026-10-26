@@ -1,0 +1,20 @@
+:root, :host {
+  --sf-bg: #111a16;
+  --sf-surface: #18251e;
+  --sf-surface-raised: #203127;
+  --sf-border: #354b3e;
+  --sf-border-soft: #2b3e32;
+  --sf-text: #f0f5ef;
+  --sf-secondary: #c3d1c7;
+  --sf-muted: #a5b9ab;
+  --sf-accent: #7aebba;
+  --sf-ink: #10251a;
+  --sf-warning: #f3c77a;
+  --sf-error: #ffadb9;
+  --sf-font: SFManrope, sans-serif;
+  /* Multiply fixed font sizes by this factor; em-sized notation inherits it. */
+  --sf-font-scale: 1;
+  --sf-arrow-scale: 1;
+  --sf-notation-font: SFLora, Georgia, serif;
+  --sf-radius: 12px;
+}

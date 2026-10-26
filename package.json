@@ -1,0 +1,42 @@
+{
+  "name": "stockfish-lens",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:ux": "node tests/ux.mjs",
+    "package": "npm run build && node scripts/package.mjs",
+    "preview:pieces": "node scripts/preview-pieces.mjs",
+    "icons": "node scripts/icons.mjs",
+    "verify:package": "node scripts/verify-package.mjs"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0"
+  },
+  "devDependencies": {
+    "@fontsource-variable/manrope": "5.2.8",
+    "@fontsource/lora": "5.2.8",
+    "@fontsource/noto-sans-symbols-2": "5.2.8",
+    "esbuild": "0.25.12",
+    "fflate": "0.8.2",
+    "linkedom": "0.18.12",
+    "playwright": "1.56.1",
+    "stockfish": "19.0.1"
+  },
+  "description": "Ferramenta de estudo com Stockfish local para partidas contra bots no Chess.com.",
+  "homepage": "https://github.com/gustavolafz/stockfish-lens",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gustavolafz/stockfish-lens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gustavolafz/stockfish-lens/issues"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

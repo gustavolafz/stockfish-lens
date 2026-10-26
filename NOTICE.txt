@@ -1,0 +1,36 @@
+Stockfish Lens 1.0.0 — GPL-3.0-only.
+Extension source: https://github.com/gustavolafz/stockfish-lens/tree/v1.0.0
+The complete source archive accompanies the installable release.
+
+Stockfish.js 19.0.1, Nathan Rugg and Stockfish contributors, GPL-3.0.
+The stockfish-19-lite-single.js / .wasm files are distributed unmodified from
+stockfish@19.0.1 on npm. Corresponding engine source and build instructions:
+https://github.com/nmrugg/stockfish.js/tree/v19.0.1
+Pinned source commit: 0d5dd7944f88c817c07a26bc4fb1905d5f9c46d6
+Included as vendor/stockfish.js in the repository and complete source archive.
+License in the installable package: licenses/GPL-3.0.txt
+
+Lite NNUE network nn-61e7af4bb97d.nnue — Stockfish contributors, CC0-1.0.
+Source: https://tests.stockfishchess.org/api/nn/nn-61e7af4bb97d.nnue
+Network archive: https://github.com/official-stockfish/networks
+The network is included in the complete source archive, under assets/engine/.
+License: assets/engine/CC0-1.0.txt in the source archive;
+licenses/NNUE-CC0-1.0.txt in the installable package.
+
+chess.js 1.4.0, Jeff Hlywa and contributors, BSD-2-Clause.
+https://github.com/jhlywa/chess.js/tree/v1.4.0
+License: licenses/chess.js-LICENSE
+
+Manrope, Lora and Noto Sans Symbols 2 — SIL Open Font License 1.1.
+Bundled unmodified from the pinned Fontsource packages (5.2.8):
+@fontsource-variable/manrope, @fontsource/lora, @fontsource/noto-sans-symbols-2.
+Licenses: licenses/Manrope-OFL.txt, licenses/Lora-OFL.txt,
+licenses/ChessSymbols-OFL.txt.
+
+The vector chess-piece drawings and extension icon are original project
+artwork distributed with the extension source under GPL-3.0-only.
+
+The screenshots supplied by the author depict the Chess.com interface and the
+extension. Chess.com names, interface artwork and trademarks belong to their
+respective owners. This independent project is not affiliated with Chess.com
+or the Stockfish project.

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Stockfish Lens — Preferências</title><link rel="icon" href="icons/icon32.png"><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header><span aria-hidden="true">♞</span><div><h1>Stockfish Lens</h1><p>Seu próximo lance, com clareza.</p></div></header>
+<main>
+  <section class="settings-section" aria-labelledby="analysis-title">
+    <h2 id="analysis-title">Análise</h2>
+    <label class="switch"><span><strong>Análise automática</strong><small id="enabledHint">Atualiza a cada posição do tabuleiro.</small></span><input id="enabled" type="checkbox"></label>
+    <div class="field-grid">
+      <div class="field"><label for="ms">Tempo por posição</label><select id="ms"><option value="500">0,5 segundo</option><option value="1200">1,2 segundo</option><option value="3000">3 segundos</option><option value="6000">6 segundos</option></select></div>
+      <div class="field"><label for="multipv">Melhores lances</label><select id="multipv"><option value="1">1 lance</option><option value="3">3 lances</option><option value="5">5 lances</option></select></div>
+    </div>
+    <p class="helper">Mais tempo permite aprofundar a análise.</p>
+  </section>
+  <section class="settings-section" aria-labelledby="display-title">
+    <h2 id="display-title">Visualização</h2>
+    <div class="field"><label for="mode">Mostrar na página</label><select id="mode"><option value="both">Painel e setas</option><option value="arrow">Só setas no tabuleiro</option><option value="panel">Só painel</option></select></div>
+    <div class="field font-control"><label for="fontScale">Tamanho das fontes</label><select id="fontScale" aria-describedby="fontScaleHint"><option value="80">80% (menor)</option><option value="90">90%</option><option value="100">100% (padrão)</option><option value="110">110%</option><option value="120">120%</option><option value="130">130%</option><option value="140">140%</option><option value="150">150% (maior)</option></select><p id="fontScaleHint" class="helper">Ajusta todos os textos do painel e do popup, incluindo os lances.</p></div>
+    <label class="switch"><span><strong>Símbolo + letra da peça</strong><small>Inclui K, Q, R, B e N nos lances.</small></span><input id="showPieceLetters" type="checkbox"></label>
+    <div class="field font-control"><label for="arrowScale">Tamanho das setas</label><select id="arrowScale" aria-describedby="arrowScaleHint"><option value="50">50% (menor)</option><option value="75">75%</option><option value="100">100% (padrão)</option><option value="125">125%</option><option value="150">150%</option><option value="175">175%</option><option value="200">200% (maior)</option></select><p id="arrowScaleHint" class="helper">Ajusta a espessura e as pontas das três setas.</p></div>
+  </section>
+  <fieldset class="settings-section"><legend>Setas no tabuleiro</legend>
+    <label class="switch"><span><strong>Mostrar setas</strong><small id="arrowHint">Escolha os lances que quer acompanhar.</small></span><input id="showArrows" type="checkbox"></label>
+    <label class="arrow-choice rank-1"><span><i aria-hidden="true"></i>Melhor lance</span><input id="arrowBest" type="checkbox"></label>
+    <label class="arrow-choice rank-2"><span><i aria-hidden="true"></i>2º melhor lance</span><input id="arrowSecond" type="checkbox"></label>
+    <label class="arrow-choice rank-3"><span><i aria-hidden="true"></i>3º melhor lance</span><input id="arrowThird" type="checkbox"></label>
+    <label class="switch"><span><strong>Ocultar alternativas desfavoráveis</strong><small>Filtra o 2º e o 3º lances que favorecem o adversário. A melhor sugestão permanece disponível.</small></span><input id="hideUnfavorableArrows" type="checkbox"></label>
+  </fieldset>
+  <details class="shortcut-options"><summary><h2>Atalhos de teclado</h2></summary><dl id="shortcutList"></dl><button id="customizeShortcuts" type="button">Personalizar no Chrome</button></details>
+  <section class="settings-section layout-options" aria-labelledby="layout-title">
+    <h2 id="layout-title">Posição e tamanho</h2><p class="helper">Arraste pelo cabeçalho e ajuste pelo canto do painel.</p>
+    <button id="resetLayout" type="button">Restaurar posição e tamanho</button>
+  </section>
+</main>
+<p id="saved" role="status" aria-live="polite"></p>
+<footer><span id="version">Stockfish Lens</span><span>Stockfish 19 · local</span></footer>
+<script src="popup.js"></script>
+</body></html>

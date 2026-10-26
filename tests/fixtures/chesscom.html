@@ -1,0 +1,142 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Tabuleiro de teste</title><style>body{margin:0;background:#262926;color:#ddd;font-family:system-ui}main{padding:32px}h1{font-size:20px}wc-chess-board{display:block;position:relative;width:min(65vw,620px);height:min(65vw,620px);background:conic-gradient(#739552 25%,#ebecd0 0 50%,#739552 0 75%,#ebecd0 0) 0 0/25% 25%;}.coordinates,.arrows{position:absolute;inset:0;width:100%;height:100%}.coordinates{z-index:2}.coordinates text{font-family:system-ui;fill:#333}.piece{position:absolute;width:12.5%;height:12.5%;font-size:clamp(18px,5vw,62px);line-height:1.2;text-align:center}.piece:before{display:block}.animated-effect,.hover-square,.element-pool{display:none}wc-simple-move-list{display:none}.square-11{left:0.0%;top:87.5%}.square-12{left:0.0%;top:75.0%}.square-13{left:0.0%;top:62.5%}.square-14{left:0.0%;top:50.0%}.square-15{left:0.0%;top:37.5%}.square-16{left:0.0%;top:25.0%}.square-17{left:0.0%;top:12.5%}.square-18{left:0.0%;top:0.0%}.square-21{left:12.5%;top:87.5%}.square-22{left:12.5%;top:75.0%}.square-23{left:12.5%;top:62.5%}.square-24{left:12.5%;top:50.0%}.square-25{left:12.5%;top:37.5%}.square-26{left:12.5%;top:25.0%}.square-27{left:12.5%;top:12.5%}.square-28{left:12.5%;top:0.0%}.square-31{left:25.0%;top:87.5%}.square-32{left:25.0%;top:75.0%}.square-33{left:25.0%;top:62.5%}.square-34{left:25.0%;top:50.0%}.square-35{left:25.0%;top:37.5%}.square-36{left:25.0%;top:25.0%}.square-37{left:25.0%;top:12.5%}.square-38{left:25.0%;top:0.0%}.square-41{left:37.5%;top:87.5%}.square-42{left:37.5%;top:75.0%}.square-43{left:37.5%;top:62.5%}.square-44{left:37.5%;top:50.0%}.square-45{left:37.5%;top:37.5%}.square-46{left:37.5%;top:25.0%}.square-47{left:37.5%;top:12.5%}.square-48{left:37.5%;top:0.0%}.square-51{left:50.0%;top:87.5%}.square-52{left:50.0%;top:75.0%}.square-53{left:50.0%;top:62.5%}.square-54{left:50.0%;top:50.0%}.square-55{left:50.0%;top:37.5%}.square-56{left:50.0%;top:25.0%}.square-57{left:50.0%;top:12.5%}.square-58{left:50.0%;top:0.0%}.square-61{left:62.5%;top:87.5%}.square-62{left:62.5%;top:75.0%}.square-63{left:62.5%;top:62.5%}.square-64{left:62.5%;top:50.0%}.square-65{left:62.5%;top:37.5%}.square-66{left:62.5%;top:25.0%}.square-67{left:62.5%;top:12.5%}.square-68{left:62.5%;top:0.0%}.square-71{left:75.0%;top:87.5%}.square-72{left:75.0%;top:75.0%}.square-73{left:75.0%;top:62.5%}.square-74{left:75.0%;top:50.0%}.square-75{left:75.0%;top:37.5%}.square-76{left:75.0%;top:25.0%}.square-77{left:75.0%;top:12.5%}.square-78{left:75.0%;top:0.0%}.square-81{left:87.5%;top:87.5%}.square-82{left:87.5%;top:75.0%}.square-83{left:87.5%;top:62.5%}.square-84{left:87.5%;top:50.0%}.square-85{left:87.5%;top:37.5%}.square-86{left:87.5%;top:25.0%}.square-87{left:87.5%;top:12.5%}.square-88{left:87.5%;top:0.0%}.piece.wk:before{content:"♔";color:#fff;text-shadow:0 1px 2px #000}.piece.wq:before{content:"♕";color:#fff;text-shadow:0 1px 2px #000}.piece.wr:before{content:"♖";color:#fff;text-shadow:0 1px 2px #000}.piece.wb:before{content:"♗";color:#fff;text-shadow:0 1px 2px #000}.piece.wn:before{content:"♘";color:#fff;text-shadow:0 1px 2px #000}.piece.wp:before{content:"♙";color:#fff;text-shadow:0 1px 2px #000}.piece.bk:before{content:"♚";color:#111;text-shadow:0 1px 2px #000}.piece.bq:before{content:"♛";color:#111;text-shadow:0 1px 2px #000}.piece.br:before{content:"♜";color:#111;text-shadow:0 1px 2px #000}.piece.bb:before{content:"♝";color:#111;text-shadow:0 1px 2px #000}.piece.bn:before{content:"♞";color:#111;text-shadow:0 1px 2px #000}.piece.bp:before{content:"♟";color:#111;text-shadow:0 1px 2px #000}</style><main><h1>Chess.com · fixture do HTML fornecido</h1><wc-chess-board class="board" id="board-single" style="--move-animation-duration: 180ms;"><svg viewBox="0 0 100 100" class="coordinates" aria-hidden="true"><text x="0.75" y="3.5" font-size="2.8" class="coordinate-light">8</text><text x="0.75" y="15.75" font-size="2.8" class="coordinate-dark">7</text><text x="0.75" y="28.25" font-size="2.8" class="coordinate-light">6</text><text x="0.75" y="40.75" font-size="2.8" class="coordinate-dark">5</text><text x="0.75" y="53.25" font-size="2.8" class="coordinate-light">4</text><text x="0.75" y="65.75" font-size="2.8" class="coordinate-dark">3</text><text x="0.75" y="78.25" font-size="2.8" class="coordinate-light">2</text><text x="0.75" y="90.75" font-size="2.8" class="coordinate-dark">1</text><text x="10" y="99" font-size="2.8" class="coordinate-dark">a</text><text x="22.5" y="99" font-size="2.8" class="coordinate-light">b</text><text x="35" y="99" font-size="2.8" class="coordinate-dark">c</text><text x="47.5" y="99" font-size="2.8" class="coordinate-light">d</text><text x="60" y="99" font-size="2.8" class="coordinate-dark">e</text><text x="72.5" y="99" font-size="2.8" class="coordinate-light">f</text><text x="85" y="99" font-size="2.8" class="coordinate-dark">g</text><text x="97.5" y="99" font-size="2.8" class="coordinate-light">h</text></svg><!--/Coordinates--><div class="element-pool" style="" data-test-element="" data-test-type=""></div><div class="element-pool" style="" data-test-element="" data-test-type=""></div><div class="highlight square-24" style="background-color: rgb(0, 165, 255); opacity: 0.5;" data-test-element="highlight" data-test-type="highlight"></div><div class="highlight square-44" data-test-element="highlight" data-test-type="highlight" style="background-color: rgb(0, 165, 255); opacity: 0.5;"></div><!--/Squares--><!--/Blinking Highlights--><!--/Effects--><div class="hover-square square-61" style="visibility: hidden;"><svg viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" stroke="rgba(255, 255, 255, 0.65)" stroke-width="10" fill="none"></rect></svg></div><!--/Hover Square--><div class="animated-effect winner square-78 tuck-top" style="--square-size: 105px; --target-icon-size: 18.75%;"><div class="square winner"></div><div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon slide" width="70%" height="70%" viewBox="0 0 18 19">
+      <g id="winner">
+    <path d="m 24.4334,39.6517 c 15.9034,0 22.8584,-4.7017 22.8584,-4.7017 l 0.975,-23.6167 c 0,-2.16663 -1.495,-2.79497 -3.25,-1.4083 L 34.1834,17.53 26.6868,2.66667 C 26.0151,0.911667 25.1484,0.5 24.5201,0.5 23.8918,0.5 22.9384,0.955 22.3534,2.66667 L 14.6834,17.53 3.85008,9.925 C 2.09508,8.53833 0.513416,9.16667 0.600083,11.3333 L 1.57508,34.95 c 0,0 6.955,4.55 22.85832,4.7017 z" fill="white" style="fill:#ffffff;fill-opacity:1)" id="path1" transform="matrix(0.25173118,0,0,0.25173118,2.8497971,2.8741344)"></path>
+  </g>
+    </svg>
+  </div><div class="icon-background winner"></div><div class="text">Vencedor</div></div><div class="animated-effect resignwhite square-71" style="--square-size: 105px; --target-icon-size: 18.75%;"><div class="square resignwhite"></div><div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon slide" width="70%" height="70%" viewBox="0 0 18 19">
+      <g id="resign">
+     <path d="M 4.1166627,5.4628911 C 4.0978684,5.3907765 4.0650542,5.3230701 4.0200928,5.2636365 3.9751319,5.2041998 3.9189029,5.1542038 3.8546188,5.1164993 3.7247928,5.0403508 3.5700345,5.0188935 3.4243877,5.0568504 3.3522707,5.0756446 3.2845643,5.1084589 3.2251276,5.1534202 3.1656931,5.1983811 3.115696,5.2546101 3.0779912,5.3188916 3.001843,5.448713 2.9803873,5.6034758 3.0183435,5.7491277 l 2.329766,8.6866993 c 0.01457,0.07524 0.04445,0.146674 0.087786,0.209878 0.043333,0.0632 0.099198,0.116846 0.1641237,0.157559 0.064951,0.04071 0.1375394,0.06762 0.2133234,0.07911 0.075759,0.01148 0.1530907,0.0072 0.2271523,-0.01241 0.07409,-0.01967 0.1433304,-0.05434 0.2034382,-0.101894 0.060109,-0.04752 0.1097821,-0.106936 0.1459767,-0.174483 0.036192,-0.06755 0.058111,-0.141808 0.064403,-0.218191 0.00626,-0.07638 -0.00317,-0.15324 -0.02786,-0.225804 z" fill="white" style="fill:#ffffff;fill-opacity:1;stroke-width:0.249618" id="path1"></path>
+  <path d="M 14.467491,6.7409343 C 14.334345,6.1485165 14.15462,5.5960374 13.994864,4.9969421 L 13.45569,3 c -0.451783,0.4941833 -1.044201,0.8380118 -1.6974,0.985159 -0.544991,0.1279266 -1.104735,0.1816643 -1.664103,0.1597553 -0.5525038,0 -1.0916782,-0.039939 -1.6374927,-0.046596 C 7.8971265,4.0817857 7.3377825,4.137723 6.7925673,4.2647309 6.1388934,4.4077545 5.5444039,4.7467926 5.088507,5.2365754 L 5.6276764,7.2335301 6.093638,8.9775093 c 0.1397858,0.5125652 0.2862366,1.0517387 0.4526316,1.6840957 0,0.106513 0.059911,0.213 0.086543,0.319512 C 7.091185,10.489718 7.6875722,10.14859 8.3435177,10.002614 8.889532,9.8809508 9.4484757,9.8272835 10.007645,9.8428592 c 0.545839,0 1.085013,0.046599 1.630828,0.053242 0.561465,0.018619 1.123005,-0.035069 1.670766,-0.1597549 C 13.95882,9.5848047 14.547867,9.2415815 15,8.7511824 14.793641,7.9790383 14.627246,7.3400171 14.467491,6.7409343 Z" fill="white" style="fill:#ffffff;fill-opacity:1;stroke-width:0.249618" id="path2"></path>
+  </g>
+    </svg>
+  </div><div class="icon-background resignwhite"></div><div class="text">Desistir</div></div><!--/Effects--><!--/VFX Below--><div class="element-pool" style=""></div><div class="element-pool" style=""></div><div class="piece br square-68" style=""></div><div class="piece wp square-72" style=""></div><div class="piece wq square-52" style=""></div><div class="piece wp square-12" style=""></div><div class="piece bk square-78" style=""></div><div class="piece wp square-23" style=""></div><div class="piece wp square-55" style=""></div><div class="piece bp square-86" style=""></div><div class="piece bp square-45" style=""></div><div class="piece bp square-27" style=""></div><div class="element-pool" style=""></div><div class="piece bp square-77" style=""></div><div class="piece wk square-71" style=""></div><div class="element-pool" style=""></div><div class="piece wp square-84" style=""></div><div class="element-pool" style=""></div><div class="piece wb square-74" style=""></div><div class="element-pool" style=""></div><div class="piece wr square-41" style=""></div><div class="piece bb square-31" style=""></div><div class="element-pool" style=""></div><div class="piece bp square-67" style=""></div><div class="piece br square-38" style=""></div><div class="element-pool" style=""></div><div class="piece bq square-24" style=""></div><div class="element-pool" style=""></div><div class="piece bp square-56" style=""></div><div class="element-pool" style=""></div><div class="piece bp square-17" style=""></div><div class="piece wp square-62" style=""></div><!--/Pieces--><!--/Custom Items--><!--/VFX Above--><!--/Move Hints--><!--/Capture Hints--><svg viewBox="0 0 100 100" class="arrows"></svg><!--/Arrows--><!--/Promotion Window--><!--/Fade Setup--></wc-chess-board><wc-simple-move-list class="mode-swap-move-list-wrapper-component move-list chessboard-pkg-move-list-component" scroll-container-id="live-game-tab-scroll-container" board-id="board-single" timestamp-method="withBaseTime"><div style="
+    --timeMaxValue: 628;
+    --timestampWidth: 35px" class="timestamps-with-base-time"><div class="main-line-row move-list-row light-row" data-whole-move-number="1">1.  <div data-node="0-0" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">e4 </span></div>  <div data-node="0-1" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">c6 </span></div>  <div data-move-list-el="timestamp" data-ply="1" data-time="22" class="time-white" style="
+    --timeValue: 22;
+    --timeBarWidth: 1.3994492567881722px;
+  ">2.2s</div><div data-move-list-el="timestamp" data-ply="2" data-time="10" class="time-black" style="
+    --timeValue: 10;
+    --timeBarWidth: 0.6365150100283556px;
+  ">1.0s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="2">2.  <div data-node="0-2" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">d4 </span></div>  <div data-node="0-3" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">d5 </span></div>  <div data-move-list-el="timestamp" data-ply="3" data-time="256" class="time-white" style="
+    --timeValue: 256;
+    --timeBarWidth: 14.817533404239818px;
+  ">25.6s</div><div data-move-list-el="timestamp" data-ply="4" data-time="17" class="time-black" style="
+    --timeValue: 17;
+    --timeBarWidth: 1.0817392035730669px;
+  ">1.7s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="3">3.  <div data-node="0-4" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">e5 </span></div>  <div data-node="0-5" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">c5 </span></div>  <div data-move-list-el="timestamp" data-ply="5" data-time="147" class="time-white" style="
+    --timeValue: 147;
+    --timeBarWidth: 9.045244684346091px;
+  ">14.7s</div><div data-move-list-el="timestamp" data-ply="6" data-time="16" class="time-black" style="
+    --timeValue: 16;
+    --timeBarWidth: 1.0181627273991378px;
+  ">1.6s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="4">4.  <div data-node="0-6" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-white " data-figurine="N"></span> f3 </span></div>  <div data-node="0-7" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-black " data-figurine="B"></span> g4 </span></div>  <div data-move-list-el="timestamp" data-ply="7" data-time="150" class="time-white" style="
+    --timeValue: 150;
+    --timeBarWidth: 9.217474411461005px;
+  ">15.0s</div><div data-move-list-el="timestamp" data-ply="8" data-time="22" class="time-black" style="
+    --timeValue: 22;
+    --timeBarWidth: 1.3994492567881722px;
+  ">2.2s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="5">5.  <div data-node="0-8" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-white " data-figurine="B"></span> e2 </span></div>  <div data-node="0-9" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-black " data-figurine="B"></span> xf3 </span></div>  <div data-move-list-el="timestamp" data-ply="9" data-time="506" class="time-white" style="
+    --timeValue: 506;
+    --timeBarWidth: 24.17620362355154px;
+  ">50.6s</div><div data-move-list-el="timestamp" data-ply="10" data-time="16" class="time-black" style="
+    --timeValue: 16;
+    --timeBarWidth: 1.0181627273991378px;
+  ">1.6s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="6">6.  <div data-node="0-10" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-white " data-figurine="B"></span> xf3 </span></div>  <div data-node="0-11" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-black " data-figurine="N"></span> c6 </span></div>  <div data-move-list-el="timestamp" data-ply="11" data-time="273" class="time-white" style="
+    --timeValue: 273;
+    --timeBarWidth: 15.621896162622845px;
+  ">27.3s</div><div data-move-list-el="timestamp" data-ply="12" data-time="35" class="time-black" style="
+    --timeValue: 35;
+    --timeBarWidth: 2.223692425045245px;
+  ">3.5s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="7">7.  <div data-node="0-12" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">c3 </span></div>  <div data-node="0-13" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">e6 </span></div>  <div data-move-list-el="timestamp" data-ply="13" data-time="460" class="time-white" style="
+    --timeValue: 460;
+    --timeBarWidth: 22.814799304205135px;
+  ">46.0s</div><div data-move-list-el="timestamp" data-ply="14" data-time="26" class="time-black" style="
+    --timeValue: 26;
+    --timeBarWidth: 1.6533732401212622px;
+  ">2.6s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="8">8.  <div data-node="0-14" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">O-O </span></div>  <div data-node="0-15" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-black " data-figurine="N"></span> ge7 </span></div>  <div data-move-list-el="timestamp" data-ply="15" data-time="347" class="time-white" style="
+    --timeValue: 347;
+    --timeBarWidth: 18.8181078857654px;
+  ">34.7s</div><div data-move-list-el="timestamp" data-ply="16" data-time="28" class="time-black" style="
+    --timeValue: 28;
+    --timeBarWidth: 1.7802402674584406px;
+  ">2.8s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="9">9.  <div data-node="0-16" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-white " data-figurine="B"></span> e3 </span></div>  <div data-node="0-17" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-black " data-figurine="N"></span> f5 </span></div>  <div data-move-list-el="timestamp" data-ply="17" data-time="328" class="time-white" style="
+    --timeValue: 328;
+    --timeBarWidth: 18.04394587301427px;
+  ">32.8s</div><div data-move-list-el="timestamp" data-ply="18" data-time="20" class="time-black" style="
+    --timeValue: 20;
+    --timeBarWidth: 1.2724021899065479px;
+  ">2.0s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="10">10.  <div data-node="0-18" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-white " data-figurine="N"></span> a3 </span></div>  <div data-node="0-19" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-black " data-figurine="B"></span> e7 </span></div>  <div data-move-list-el="timestamp" data-ply="19" data-time="573" class="time-white" style="
+    --timeValue: 573;
+    --timeBarWidth: 25.92801202760266px;
+  ">57.3s</div><div data-move-list-el="timestamp" data-ply="20" data-time="136" class="time-black" style="
+    --timeValue: 136;
+    --timeBarWidth: 8.407991819755628px;
+  ">13.6s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="11">11.  <div data-node="0-20" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-white " data-figurine="N"></span> c2 </span></div>  <div data-node="0-21" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess rook-black " data-figurine="R"></span> c8 </span></div>  <div data-move-list-el="timestamp" data-ply="21" data-time="290" class="time-white" style="
+    --timeValue: 290;
+    --timeBarWidth: 16.39976563630961px;
+  ">29.0s</div><div data-move-list-el="timestamp" data-ply="22" data-time="48" class="time-black" style="
+    --timeValue: 48;
+    --timeBarWidth: 3.0442640770975875px;
+  ">4.8s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="12">12.  <div data-node="0-22" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess queen-white " data-figurine="Q"></span> d2 </span></div>  <div data-node="0-23" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess queen-black " data-figurine="Q"></span> b6 </span></div>  <div data-move-list-el="timestamp" data-ply="23" data-time="210" class="time-white" style="
+    --timeValue: 210;
+    --timeBarWidth: 12.50844673905001px;
+  ">21.0s</div><div data-move-list-el="timestamp" data-ply="24" data-time="100" class="time-black" style="
+    --timeValue: 100;
+    --timeBarWidth: 6.264403854575756px;
+  ">10.0s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="13">13.  <div data-node="0-24" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">b3 </span></div>  <div data-node="0-25" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">O-O </span></div>  <div data-move-list-el="timestamp" data-ply="25" data-time="157" class="time-white" style="
+    --timeValue: 157;
+    --timeBarWidth: 9.616656062962468px;
+  ">15.7s</div><div data-move-list-el="timestamp" data-ply="26" data-time="240" class="time-black" style="
+    --timeValue: 240;
+    --timeBarWidth: 14.036243467926479px;
+  ">24.0s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="14">14.  <div data-node="0-26" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-white " data-figurine="B"></span> g4 </span></div>  <div data-node="0-27" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-black " data-figurine="N"></span> xe3 </span></div>  <div data-move-list-el="timestamp" data-ply="27" data-time="27" class="time-white" style="
+    --timeValue: 27;
+    --timeBarWidth: 1.716815181225261px;
+  ">2.7s</div><div data-move-list-el="timestamp" data-ply="28" data-time="135" class="time-black" style="
+    --timeValue: 135;
+    --timeBarWidth: 8.34962211699681px;
+  ">13.5s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="15">15.  <div data-node="0-28" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess queen-white " data-figurine="Q"></span> xe3 </span></div>  <div data-node="0-29" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">cxd4 </span></div>  <div data-move-list-el="timestamp" data-ply="29" data-time="17" class="time-white" style="
+    --timeValue: 17;
+    --timeBarWidth: 1.0817392035730669px;
+  ">1.7s</div><div data-move-list-el="timestamp" data-ply="30" data-time="87" class="time-black" style="
+    --timeValue: 87;
+    --timeBarWidth: 5.4710927045046835px;
+  ">8.7s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="16">16.  <div data-node="0-30" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-white " data-figurine="N"></span> xd4 </span></div>  <div data-node="0-31" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess knight-black " data-figurine="N"></span> xd4 </span></div>  <div data-move-list-el="timestamp" data-ply="31" data-time="106" class="time-white" style="
+    --timeValue: 106;
+    --timeBarWidth: 6.627356288822386px;
+  ">10.6s</div><div data-move-list-el="timestamp" data-ply="32" data-time="265" class="time-black" style="
+    --timeValue: 265;
+    --timeBarWidth: 15.246679201237834px;
+  ">26.5s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="17">17.  <div data-node="0-32" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">cxd4 </span></div>  <div data-node="0-33" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">h6 </span></div>  <div data-move-list-el="timestamp" data-ply="33" data-time="52" class="time-white" style="
+    --timeValue: 52;
+    --timeBarWidth: 3.2958049675155916px;
+  ">5.2s</div><div data-move-list-el="timestamp" data-ply="34" data-time="58" class="time-black" style="
+    --timeValue: 58;
+    --timeBarWidth: 3.6721496447513378px;
+  ">5.8s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="18">18.  <div data-node="0-34" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess rook-white " data-figurine="R"></span> ac1 </span></div>  <div data-node="0-35" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-black " data-figurine="B"></span> g5 </span></div>  <div data-move-list-el="timestamp" data-ply="35" data-time="51" class="time-white" style="
+    --timeValue: 51;
+    --timeBarWidth: 3.232966049469767px;
+  ">5.1s</div><div data-move-list-el="timestamp" data-ply="36" data-time="32" class="time-black" style="
+    --timeValue: 32;
+    --timeBarWidth: 2.033759783290074px;
+  ">3.2s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="19">19.  <div data-node="0-36" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess queen-white " data-figurine="Q"></span> e2 </span></div>  <div data-node="0-37" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess bishop-black " data-figurine="B"></span> xc1 </span></div>  <div data-move-list-el="timestamp" data-ply="37" data-time="99" class="time-white" style="
+    --timeValue: 99;
+    --timeBarWidth: 6.203709263700373px;
+  ">9.9s</div><div data-move-list-el="timestamp" data-ply="38" data-time="30" class="time-black" style="
+    --timeValue: 30;
+    --timeBarWidth: 1.9070374171451772px;
+  ">3.0s</div></div><div class="main-line-row move-list-row dark-row" data-whole-move-number="20">20.  <div data-node="0-38" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon">h4 </span></div>  <div data-node="0-39" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess queen-black " data-figurine="Q"></span> xd4 </span></div>  <div data-move-list-el="timestamp" data-ply="39" data-time="628" class="time-white" style="
+    --timeValue: 628;
+    --timeBarWidth: 27.188055674977573px;
+  ">1m 2s</div><div data-move-list-el="timestamp" data-ply="40" data-time="105" class="time-black" style="
+    --timeValue: 105;
+    --timeBarWidth: 6.567011153198161px;
+  ">10.5s</div></div><div class="main-line-row move-list-row light-row" data-whole-move-number="21">21.  <div data-node="0-40" class="node white-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon"><span class="icon-font-chess rook-white " data-figurine="R"></span> d1 </span></div>  <div data-node="0-41" class="node black-move main-line-ply"> <span class="node-highlight-content offset-for-annotation-icon selected"><span class="icon-font-chess queen-black " data-figurine="Q"></span> b4 </span></div>  <div data-move-list-el="timestamp" data-ply="41" data-time="74" class="time-white" style="
+    --timeValue: 74;
+    --timeBarWidth: 4.669197488117994px;
+  ">7.4s</div><div data-move-list-el="timestamp" data-ply="42" data-time="293" class="time-black" style="
+    --timeValue: 293;
+    --timeBarWidth: 16.534299211528037px;
+  ">29.3s</div></div> <div class="main-line-row move-list-row result-row"><span class="game-result">0-1 </span></div></div>  </wc-simple-move-list></main></html>
