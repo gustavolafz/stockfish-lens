@@ -10,7 +10,7 @@ Extensão Chrome Manifest V3 que mostra o lance que o Stockfish faria, suas prin
 [![CI](https://github.com/gustavolafz/stockfish-lens/actions/workflows/ci.yml/badge.svg)](https://github.com/gustavolafz/stockfish-lens/actions/workflows/ci.yml)
 [![Licença GPL-3.0](https://img.shields.io/badge/licen%C3%A7a-GPL--3.0-blue)](LICENSE)
 
-[**Baixar a versão 1.0.0**](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.0.0) · [Instalação](#instalação) · [Desenvolvimento](#desenvolvimento) · [Privacidade](PRIVACY.md)
+[**Baixar a versão 1.1.0**](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.0) · [Instalação](#instalação) · [Desenvolvimento](#desenvolvimento) · [Privacidade](PRIVACY.md)
 
 ## Para que serve
 
@@ -24,7 +24,7 @@ Os prints abaixo foram enviados pelo autor durante partidas contra o bot do Ches
 
 ### Melhor lance e setas
 
-![Chess.com com o painel Stockfish Lens, avaliação, continuação e três sugestões coloridas no tabuleiro](docs/images/chesscom-best-move.png)
+![Chess.com com o painel Stockfish Lens, mini barra de avaliação, continuação e três sugestões coloridas no tabuleiro](docs/images/chesscom-best-move.png)
 
 ### Compare as continuações
 
@@ -34,7 +34,7 @@ Os prints abaixo foram enviados pelo autor durante partidas contra o bot do Ches
 
 Requer Chrome 110+ ou um navegador Chromium compatível com extensões Manifest V3. A validação automatizada usa Chromium; a distribuição desta versão é por instalação manual.
 
-1. Baixe **`stockfish-lens-1.0.0.zip`** na [release 1.0.0](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.0.0).
+1. Baixe **`stockfish-lens-1.1.0.zip`** na [release 1.1.0](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.0).
 2. Extraia o ZIP para uma pasta permanente. **Não selecione o ZIP diretamente no Chrome.**
 3. Abra `chrome://extensions` e ative **Modo do desenvolvedor**.
 4. Clique em **Carregar sem compactação** e selecione a pasta que contém `manifest.json`.
@@ -61,6 +61,8 @@ A análise atualiza automaticamente após os lances e ao navegar pelo histórico
 ### Como ler as avaliações
 
 O valor com sinal é sempre **pelas brancas**: `+0,50` favorece as brancas; `−0,50` favorece as pretas. Valores `+M3` / `−M3` indicam mate para a cor correspondente; `≥` e `≤` indicam limites de uma pesquisa incompleta. A barra WDL refere-se ao **lado que tem a vez**, identificado no painel. Essas estimativas não são garantias de resultado.
+
+A mini barra abaixo do melhor lance acompanha a avaliação numérica: **brancas à esquerda, pretas à direita**, com uma marca central para o equilíbrio. Ela mantém essa orientação mesmo com o tabuleiro invertido. É uma escala visual de vantagem; não representa probabilidades de vitória. Mate preenche a barra para a cor vencedora, empate fica no centro e a barra é ocultada sem avaliação disponível.
 
 O filtro **Ocultar alternativas desfavoráveis**, ligado por padrão, pode esconder as setas do 2º e do 3º lances quando a avaliação favorece o adversário de quem joga. A melhor sugestão continua disponível e todas as variantes permanecem no painel. Uma pequena avaliação negativa não significa, por si só, um erro. Desative o filtro para mostrar todas as setas selecionadas.
 
@@ -128,8 +130,8 @@ As suítes instalam a extensão em um perfil temporário, servem os HTMLs locais
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `stockfish-lens-1.0.0.zip` | Extensão pronta para carregar no Chrome |
-| `stockfish-lens-1.0.0-source.zip` | Fontes da extensão, submódulo do motor, rede lite, docs e scripts |
+| `stockfish-lens-1.1.0.zip` | Extensão pronta para carregar no Chrome |
+| `stockfish-lens-1.1.0-source.zip` | Fontes da extensão, submódulo do motor, rede lite, docs e scripts |
 | `SHA256SUMS.txt` | Checksums dos dois ZIPs |
 
 O ZIP **Source code** criado automaticamente pelo GitHub não traz o conteúdo dos submódulos. Use o ZIP completo de fontes anexado à release ou o clone recursivo.

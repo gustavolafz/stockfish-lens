@@ -1,6 +1,6 @@
 # Motor e origem dos arquivos
 
-O Stockfish Lens 1.0.0 empacota os arquivos `stockfish-19-lite-single.js` e `stockfish-19-lite-single.wasm` **sem alteração**, vindos de `stockfish@19.0.1` no npm. A versão está fixada em `package-lock.json`.
+O Stockfish Lens empacota os arquivos `stockfish-19-lite-single.js` e `stockfish-19-lite-single.wasm` **sem alteração**, vindos de `stockfish@19.0.1` no npm. A versão está fixada em `package-lock.json`.
 
 O submódulo `vendor/stockfish.js` aponta para a tag upstream **v19.0.1**, revisão **0d5dd7944f88c817c07a26bc4fb1905d5f9c46d6**, de [nmrugg/stockfish.js](https://github.com/nmrugg/stockfish.js/tree/v19.0.1). Esse repositório contém o C++ do Stockfish e as adaptações e scripts de WebAssembly usados por essa distribuição. Não é necessário clonar um segundo checkout C++ para compilar a extensão.
 
@@ -23,6 +23,6 @@ A rede lite está incluída em `assets/engine/`, com o nome que contém o prefix
 
 ## Fontes e licenças
 
-O ZIP completo de fontes da release inclui o código da extensão, o conteúdo do submódulo, a rede lite e os scripts. O ZIP automático **Source code** gerado pelo GitHub não inclui o conteúdo de submódulos; use o pacote `stockfish-lens-1.0.0-source.zip` ou um clone com `--recurse-submodules`.
+O ZIP completo de fontes da release inclui o código da extensão, o conteúdo do submódulo, a rede lite e os scripts. O ZIP automático **Source code** gerado pelo GitHub não inclui o conteúdo de submódulos; use o pacote `stockfish-lens-1.1.0-source.zip` ou um clone com `--recurse-submodules`.
 
 O motor é GPL-3.0; a rede NNUE do arquivo oficial é CC0-1.0, com o texto preservado em `assets/engine/CC0-1.0.txt`. Os arquivos do upstream são mantidos sem alteração. As fontes tipográficas e chess.js têm licenças próprias preservadas no pacote. Consulte [NOTICE.txt](../NOTICE.txt) e [LICENSE](../LICENSE).

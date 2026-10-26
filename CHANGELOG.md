@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-10-26
+
+- Atualiza os dois prints do README com as novas capturas da interface.
+
+- Mini barra de avaliação na seção do melhor lance, com brancas à esquerda, pretas à direita e marca de equilíbrio no centro.
+- A barra acompanha o mesmo resultado do valor numérico, mantém a perspectiva das brancas e indica mate e empate. Fica oculta quando não há avaliação disponível ou a análise foi pausada.
+- Escala visual separada das probabilidades WDL, com explicação ao passar o mouse e rótulo de acessibilidade.
+
 ## 1.0.0 — 2026-10-25
 
 Primeira entrega pública do Stockfish Lens, voltada ao estudo de partidas contra bots no Chess.com.

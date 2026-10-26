@@ -63,12 +63,13 @@ async function assertSynchronized(fen) {
     const root = document.querySelector('#stockfish-lens').shadowRoot;
     const line = root.querySelector('.arrow');
     return { move: root.querySelector('.move').dataset.san, squares: root.querySelector('.squares').textContent,
-      score: root.querySelector('.score').textContent, pv: root.querySelector('.pv .san-move')?.dataset.san,
+      score: root.querySelector('.score').textContent, barLabel: root.querySelector('.eval-bar').getAttribute('aria-label'), barHidden: root.querySelector('.eval-bar').hidden, pv: root.querySelector('.pv .san-move')?.dataset.san,
       first: root.querySelector('.lines li .san-move')?.dataset.san,
       firstScore: root.querySelector('.lines li .variation-score')?.textContent,
       arrow: Object.fromEntries(['x1','y1','x2','y2'].map(key => [key, Number(line.getAttribute(key))])),
       flipped: document.querySelector('wc-chess-board').classList.contains('flipped') };
   });
+  assert(!state.barHidden); assert(state.barLabel.includes(state.score));
   const selected = new Chess(fen).move(state.move);
   assert.equal(state.squares, `${selected.from} → ${selected.to}${selected.promotion ? ` · promoção: ${selected.promotion.toUpperCase()}` : ''}`);
   assert.equal(state.first, state.move, JSON.stringify(state));
@@ -112,6 +113,8 @@ try {
   const legal = new Chess('2r2rk1/pp3pp1/4p2p/3pP3/1q4BP/1P6/P3QPP1/2bR2K1 w - - 2 22').moves();
   assert(legal.includes(result), `Illegal engine suggestion: ${result}`);
   assert.equal(await sf('.lines li').count(), 3);
+  assert(await sf('.eval-bar').isVisible());
+  assert(await sf('.eval-bar').evaluate(el => parseFloat(el.style.getPropertyValue('--sf-eval-white')) < 50));
   assert((await sf('.wdl').textContent()).includes('Vitória'));
   assert((await sf('.metrics').textContent()).includes('Posições pesquisadas'));
   await sf('.protocol summary').click();
@@ -170,8 +173,10 @@ try {
 
   await sf('.toggle').click();
   await sf('.status').filter({ hasText: 'pausada' }).waitFor();
+  assert(await sf('.eval-bar').isHidden());
   assert.equal(await sf('.board-overlay').evaluate(el => el.style.display), 'none');
   await sf('.toggle').click(); await completed();
+  assert(await sf('.eval-bar').isVisible());
   console.log('PASS: pause / resume clears and restores hints');
 
   const engineUrl = await sf('iframe').getAttribute('src');
@@ -340,12 +345,19 @@ try {
   await sf('button[type="submit"]').click();
   await sf('.move').filter({ hasText: 'Mate' }).waitFor();
   assert.equal(await sf('.score').textContent(), '+M0');
+  assert.equal(await sf('.eval-bar').evaluate(el => el.style.getPropertyValue('--sf-eval-white')), '100%');
   console.log('PASS: checkmate produces no move and reports the winning color');
 
   await sf('#sf-fen').fill('7k/5K2/6Q1/8/8/8/8/8 b - - 0 1');
   await sf('button[type="submit"]').click();
   await sf('.move').filter({ hasText: 'Empate' }).waitFor();
-  console.log('PASS: stalemate');
+  assert.equal(await sf('.eval-bar').evaluate(el => el.style.getPropertyValue('--sf-eval-white')), '50%');
+  await sf('#sf-fen').fill('8/8/8/8/8/5k2/6q1/7K w - - 0 1');
+  await sf('button[type="submit"]').click();
+  await sf('.move').filter({ hasText: 'Mate' }).waitFor();
+  assert.equal(await sf('.score').textContent(), '−M0');
+  assert.equal(await sf('.eval-bar').evaluate(el => el.style.getPropertyValue('--sf-eval-white')), '0%');
+  console.log('PASS: mini evaluation bar handles White / Black mate, stalemate, pause and synchronized scores');
 
   await page.goto('https://www.chess.com/game/promotion-fixture'); await completed();
   const promotionFinal = new Chess('Q5R1/8/8/7p/6Pk/1r6/R5PK/8 b - - 0 44');

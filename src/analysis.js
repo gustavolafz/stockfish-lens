@@ -9,6 +9,13 @@ export function formatScore(info) {
   return bound + score;
 }
 
+// A compact visual scale, not a win probability. Reserve the endpoints for mate.
+export function evaluationBarPercent(info) {
+  if (!Number.isFinite(info?.score)) return null;
+  if (info.mate) return info.score < 0 || Object.is(info.score, -0) ? 0 : 100;
+  return Math.max(1, Math.min(99, 50 + 50 * Math.tanh(info.score / 400)));
+}
+
 // Scores and bounds are stored from White's perspective. Keep the primary move
 // available even in losing positions; only filter alternatives known to favor
 // the opponent. A lower bound below zero is still inconclusive for White (and

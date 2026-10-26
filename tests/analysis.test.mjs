@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SearchAnalysis, formatScore, hideUnfavorableAlternative } from '../src/analysis.js';
+import { SearchAnalysis, formatScore, hideUnfavorableAlternative, evaluationBarPercent } from '../src/analysis.js';
 
 const fen = 'r2q1rk1/pp2ppbp/2n1bnp1/3p4/3P4/1BP2N1P/PP2QPP1/RNB2RK1 b - - 0 10';
 const trace = JSON.parse(readFileSync(new URL('fixtures/bestmove-trace.json', import.meta.url), 'utf8'));
@@ -117,4 +117,25 @@ test('filtering arrows preserves all analyzed candidates and their original rank
     hideUnfavorableAlternative(entry, index + 1, search.turn) ? [] : [index + 1]);
   assert.deepEqual(visible, [1, 3]);
   assert.deepEqual(search.lines.map(entry => entry.pv[0]), ['d8c7', 'd8b6', 'a8c8']);
+});
+
+
+test('mini evaluation bar is symmetric and monotonic with White-relative advantage', () => {
+  assert.equal(evaluationBarPercent({ score: 0 }), 50);
+  let previous = 50;
+  for (const score of [29, 100, 200, 600, 10000]) {
+    const white = evaluationBarPercent({ score });
+    const black = evaluationBarPercent({ score: -score });
+    assert(white >= previous && white > 50 && white < 100);
+    assert(black > 0 && black < 50);
+    assert(Math.abs(white + black - 100) < .0001);
+    previous = white;
+  }
+});
+
+test('mini evaluation bar reserves the endpoints for mate and rejects missing evaluations', () => {
+  for (const info of [null, undefined, {}, { score: null }, { score: NaN }, { score: Infinity }])
+    assert.equal(evaluationBarPercent(info), null);
+  for (const score of [0, 1, 20]) assert.equal(evaluationBarPercent({ score, mate: true }), 100);
+  for (const score of [-0, -1, -20]) assert.equal(evaluationBarPercent({ score, mate: true }), 0);
 });

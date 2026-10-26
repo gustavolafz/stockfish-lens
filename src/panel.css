@@ -30,6 +30,10 @@ header strong span { font-weight: 500; color: var(--sf-secondary); }
 .score-block small { display: block; color: var(--sf-muted); font-size: calc(10.5px * var(--sf-font-scale)); }
 .squares { color: var(--sf-secondary); font-size: calc(12px * var(--sf-font-scale)); min-height: 19px; letter-spacing: .2px; }
 .divider { height: 1px; background: #36513e; margin: 14px 0 11px; }
+.divider:has(.eval-bar:not([hidden])) { height: 8px; background: none; }
+.eval-bar { position: relative; width: 100%; height: 100%; overflow: hidden; border: 1px solid #698173; border-radius: 5px; background: #101814; }
+.eval-white { display: block; width: var(--sf-eval-white, 50%); height: 100%; background: #f1ead9; transition: width .2s ease; }
+.eval-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #7c9489; }
 .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; font-size: calc(11.5px * var(--sf-font-scale)); font-weight: 650; color: var(--sf-secondary); }
 .depth { color: var(--sf-muted); }
 .status { display: flex; align-items: flex-start; gap: 7px; color: var(--sf-secondary); font-size: calc(12px * var(--sf-font-scale)); margin: 10px 0 0; line-height: 1.55; }

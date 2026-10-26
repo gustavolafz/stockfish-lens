@@ -1,5 +1,5 @@
-Stockfish Lens 1.0.0 — GPL-3.0-only.
-Extension source: https://github.com/gustavolafz/stockfish-lens/tree/v1.0.0
+Stockfish Lens 1.1.0 — GPL-3.0-only.
+Extension source: https://github.com/gustavolafz/stockfish-lens/tree/v1.1.0
 The complete source archive accompanies the installable release.
 
 Stockfish.js 19.0.1, Nathan Rugg and Stockfish contributors, GPL-3.0.

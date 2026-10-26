@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { BOARD_SELECTOR, readPosition, placementFromBoard, squarePoint, isFlipped } from './position.js';
-import { SearchAnalysis, formatScore, hideUnfavorableAlternative } from './analysis.js';
+import { SearchAnalysis, formatScore, hideUnfavorableAlternative, evaluationBarPercent } from './analysis.js';
 import { DEFAULTS, normalizeSettings, ARROW_SETTINGS, arrowPreference, FONT_SCALES, ARROW_SCALES } from './settings.js';
 import { renderSan, renderLine } from './notation.js';
 import { renderPiece } from './pieces.js';
@@ -34,7 +34,7 @@ async function main() {
         <div class="source-row"><div class="eyebrow">O STOCKFISH JOGARIA</div><span class="source-badge">Tabuleiro</span></div>
         <div class="result"><strong class="move">—</strong><div class="score-block" title="Avaliação para as brancas. Valores negativos favorecem as pretas."><span class="score">—</span><small>Pelas brancas</small></div></div>
         <div class="squares">Aguardando o tabuleiro</div>
-        <div class="divider"></div>
+        <div class="divider"><div class="eval-bar" role="img" hidden><span class="eval-white"></span><span class="eval-center"></span></div></div>
         <div class="meta"><span class="turn">Posição não identificada</span><span class="depth">Prof. —</span></div>
         <p class="status" role="status" aria-live="polite">Carregando motor local…</p>
         <p class="premove-note section-note" role="status" hidden>Pré-movimento marcado. Analisando a posição real; setas temporariamente ocultas.</p>
@@ -141,7 +141,21 @@ async function main() {
     noticeTimer = setTimeout(() => { $('.notice').textContent = ''; }, 3500);
   }
   const send = data => frame?.contentWindow?.postMessage({ channel, ...data }, new URL(chrome.runtime.getURL('/')).origin);
+  function renderEvaluationBar(info) {
+    const bar = $('.eval-bar');
+    const percent = evaluationBarPercent(info);
+    bar.hidden = percent === null;
+    if (percent === null) {
+      bar.style.removeProperty('--sf-eval-white');
+      bar.removeAttribute('aria-label'); bar.removeAttribute('title');
+      return;
+    }
+    bar.style.setProperty('--sf-eval-white', `${percent}%`);
+    bar.setAttribute('aria-label', `Avaliação pelas brancas: ${$('.score').textContent}. Brancas à esquerda; pretas à direita.`);
+    bar.title = `${info.bound ? 'Limite da avaliação' : 'Avaliação'}: ${$('.score').textContent} pelas brancas. Escala visual, não representa chances de vitória.`;
+  }
   const clearResult = () => {
+    renderEvaluationBar(null);
     move = null;
     $('.move').textContent = $('.score').textContent = '—';
     $('.squares').textContent = '—';
@@ -182,6 +196,7 @@ async function main() {
       send({ type: 'cancel' });
       $('.move').textContent = game.isCheckmate() ? 'Mate' : 'Empate';
       $('.score').textContent = game.isCheckmate() ? (game.turn() === 'w' ? '−M0' : '+M0') : '0.00';
+      renderEvaluationBar({ score: game.isCheckmate() && game.turn() === 'w' ? -0 : 0, mate: game.isCheckmate() });
       status(game.isCheckmate() ? 'Xeque-mate. Não há lance legal.' : 'Posição encerrada pelas regras do xadrez.', 'complete');
       return;
     }
@@ -287,6 +302,7 @@ async function main() {
     $('.move').dataset.san = info.san[0];
     $('.move').replaceChildren(renderSan(document, info.san[0], analysis.turn));
     $('.score').textContent = formatScore(info);
+    renderEvaluationBar(info);
     $('.score').title = info.bound ? 'Limite estimado durante a pesquisa; a avaliação exata não foi concluída.' : '';
     $('.depth').textContent = `Prof. ${info.depth ?? '—'}`;
     $('.squares').textContent = `${move.slice(0, 2)} → ${move.slice(2, 4)}${move[4] ? ` · promoção: ${move[4].toUpperCase()}` : ''}`;

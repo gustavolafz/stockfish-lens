@@ -240,12 +240,25 @@ try {
     await popup.locator('#fontScale').selectOption('100');
     await popup.locator('#arrowScale').selectOption('100');
     await page.waitForFunction(() => document.querySelector('#stockfish-lens').style.getPropertyValue('--sf-font-scale') === '1');
+    assert(await sf('.eval-bar').isVisible());
     report.viewports.push({ ...size, ...geometry, fontSizes: enlarged });
   }
   await sf('.statistics').evaluate(section => {
     const scroller = section.closest('.body'); scroller.scrollTop += section.getBoundingClientRect().top - scroller.getBoundingClientRect().top - 12;
   });
   await sf('.panel').screenshot({ path: 'artifacts/ux-mobile-refined.png' });
+  await popup.locator('#fontScale').selectOption('100');
+  await page.setViewportSize({ width: 1366, height: 1000 });
+  await popup.locator('#resetLayout').click();
+  await sf('.fen-options summary').click();
+  await sf('#sf-fen').fill('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+  await sf('button[type="submit"]').click(); await ready();
+  await page.bringToFront();
+  await sf('.body').evaluate(el => el.scrollTop = 0);
+  const bar = await sf('.eval-bar').boundingBox();
+  assert(bar.height <= 10 && bar.width > 200);
+  assert(await sf('.eval-bar').evaluate(el => parseFloat(el.style.getPropertyValue('--sf-eval-white')) > 50));
+  await sf('.best-card').screenshot({ path: 'artifacts/mini-eval-bar.png' });
   await popup.close();
   assert.deepEqual(errors, []);
   await writeFile('artifacts/ux-review.json', JSON.stringify(report, null, 2));

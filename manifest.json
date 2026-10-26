@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Stockfish Lens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Ferramenta de estudo contra bots no Chess.com, com Stockfish local, variantes, avaliações e setas no tabuleiro.",
   "minimum_chrome_version": "110",
   "permissions": [
