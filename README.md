@@ -43,7 +43,7 @@ Requer Chrome 110+ ou um navegador Chromium compatível com extensões Manifest 
 
 Para atualizar, substitua os arquivos na mesma pasta, clique em **Recarregar** no cartão da extensão e recarregue a página do Chess.com. Seus ajustes de aparência e análise ficam salvos. Ao expandir, o painel restaura a posição e o tamanho que você configurou.
 
-A release também inclui um ZIP completo de fontes e `SHA256SUMS.txt`. No Linux/macOS, use `sha256sum -c SHA256SUMS.txt` na pasta que contém os dois ZIPs para conferir os downloads.
+A release também inclui um ZIP completo de fontes e `SHA256SUMS.txt`. Para conferir os downloads na pasta que contém os dois ZIPs, use `sha256sum -c SHA256SUMS.txt` no Linux ou `shasum -a 256 -c SHA256SUMS.txt` no macOS.
 
 ## O que você pode acompanhar
 
