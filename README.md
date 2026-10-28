@@ -10,7 +10,7 @@ Extensão Chrome Manifest V3 que mostra o lance que o Stockfish faria, suas prin
 [![CI](https://github.com/gustavolafz/stockfish-lens/actions/workflows/ci.yml/badge.svg)](https://github.com/gustavolafz/stockfish-lens/actions/workflows/ci.yml)
 [![Licença GPL-3.0](https://img.shields.io/badge/licen%C3%A7a-GPL--3.0-blue)](LICENSE)
 
-[**Baixar a versão 1.1.0**](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.0) · [Instalação](#instalação) · [Desenvolvimento](#desenvolvimento) · [Privacidade](PRIVACY.md)
+[**Baixar a versão 1.1.2**](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.2) · [Instalação](#instalação) · [Desenvolvimento](#desenvolvimento) · [Privacidade](PRIVACY.md)
 
 ## Para que serve
 
@@ -34,7 +34,7 @@ Os prints abaixo foram enviados pelo autor durante partidas contra o bot do Ches
 
 Requer Chrome 110+ ou um navegador Chromium compatível com extensões Manifest V3. A validação automatizada usa Chromium; a distribuição desta versão é por instalação manual.
 
-1. Baixe **`stockfish-lens-1.1.0.zip`** na [release 1.1.0](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.0).
+1. Baixe **`stockfish-lens-1.1.2.zip`** na [release 1.1.2](https://github.com/gustavolafz/stockfish-lens/releases/tag/v1.1.2).
 2. Extraia o ZIP para uma pasta permanente. **Não selecione o ZIP diretamente no Chrome.**
 3. Abra `chrome://extensions` e ative **Modo do desenvolvedor**.
 4. Clique em **Carregar sem compactação** e selecione a pasta que contém `manifest.json`.
@@ -42,6 +42,10 @@ Requer Chrome 110+ ou um navegador Chromium compatível com extensões Manifest 
 6. O painel inicia **minimizado no canto inferior direito**. Clique em **+** para expandir; a análise já funciona com ele minimizado.
 
 Para atualizar, substitua os arquivos na mesma pasta, clique em **Recarregar** no cartão da extensão e recarregue a página do Chess.com. Seus ajustes de aparência e análise ficam salvos. Ao expandir, o painel restaura a posição e o tamanho que você configurou.
+
+O botão **↻** no cabeçalho reinicia o motor. A restauração de posição e tamanho fica em **Aparência**. **Pausar** interrompe a análise imediatamente. Se a extensão for recarregada e a conexão desta aba for perdida, o painel oferece **Atualizar página**.
+
+Se o Worker falhar sem detalhe na iframe do site, a extensão tenta executá-lo num documento interno offscreen. Cada aba conserva sua própria análise. Outros erros temporários recebem uma tentativa automática de recuperação. Se a falha persistir, clique em **Tentar novamente**. Abra **Motor e registros** e use **Baixar log (.txt)** para obter a causa técnica junto das versões da extensão e do navegador. Se faltarem arquivos, extraia novamente o ZIP completo e recarregue a extensão e a página.
 
 A release também inclui um ZIP completo de fontes e `SHA256SUMS.txt`. Para conferir os downloads na pasta que contém os dois ZIPs, use `sha256sum -c SHA256SUMS.txt` no Linux ou `shasum -a 256 -c SHA256SUMS.txt` no macOS.
 
@@ -112,6 +116,8 @@ O submódulo **`vendor/stockfish.js`** está fixado em **v19.0.1**, a mesma vers
 npm test
 npx playwright install chromium
 npm run test:browser
+npm run test:engine
+npm run test:lifecycle
 npm run test:ux
 npm run package
 npm run verify:package
@@ -121,6 +127,8 @@ Para usar um Chromium já instalado:
 
 ```sh
 CHROMIUM_PATH=/caminho/para/chrome npm run test:browser
+CHROMIUM_PATH=/caminho/para/chrome npm run test:engine
+CHROMIUM_PATH=/caminho/para/chrome npm run test:lifecycle
 CHROMIUM_PATH=/caminho/para/chrome npm run test:ux
 ```
 
@@ -130,8 +138,8 @@ As suítes instalam a extensão em um perfil temporário, servem os HTMLs locais
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `stockfish-lens-1.1.0.zip` | Extensão pronta para carregar no Chrome |
-| `stockfish-lens-1.1.0-source.zip` | Fontes da extensão, submódulo do motor, rede lite, docs e scripts |
+| `stockfish-lens-1.1.2.zip` | Extensão pronta para carregar no Chrome |
+| `stockfish-lens-1.1.2-source.zip` | Fontes da extensão, submódulo do motor, rede lite, docs e scripts |
 | `SHA256SUMS.txt` | Checksums dos dois ZIPs |
 
 O ZIP **Source code** criado automaticamente pelo GitHub não traz o conteúdo dos submódulos. Use o ZIP completo de fontes anexado à release ou o clone recursivo.

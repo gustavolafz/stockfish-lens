@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.2 — 2026-10-28
+
+- Usa um documento interno offscreen quando o Worker falha sem detalhe na iframe do site. Cada aba mantém sua própria análise e libera sua sessão ao fechar, sem depender de manter o service worker acordado.
+- Limita a espera de inicialização pelo próprio painel, inclusive quando a iframe não responde. Após 15 segundos tenta o motor interno; uma pesquisa sem retorno também oferece recuperação.
+- Pausa imediatamente e encerra o motor antes de salvar a preferência. Os controles não dependem do evento do armazenamento para atualizar.
+- Detecta a perda de contexto após recarregar a extensão, remove sugestões antigas e oferece **Atualizar página**.
+- O ícone circular do cabeçalho reinicia o motor. **Restaurar posição e tamanho** fica em **Aparência**.
+- Mantém uma tentativa automática para erros temporários, confirma a inicialização antes de enviar comandos e evita ciclos de reinicialização quando a falha persiste.
+- Registra a causa técnica da falha, a versão da extensão e o navegador em **Motor e registros**.
+- Adiciona ao CI testes de inicialização e pesquisa sem resposta, armazenamento travado, recarga real da extensão, isolamento entre abas e recuperação com o WASM real.
+
 ## 1.1.0 — 2026-10-26
 
 - Atualiza os dois prints do README com as novas capturas da interface.
