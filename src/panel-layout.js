@@ -51,7 +51,7 @@ export async function attachPanelLayout(panel, { onReset = () => {} } = {}) {
     if (!layout) return;
     const box = rect();
     layout = { ...box, height: panel.classList.contains('collapsed') ? layout.height : box.height };
-    chrome.storage.local.set({ panelLayout: layout }).catch(() => {});
+    try { chrome.storage.local.set({ panelLayout: layout }).catch(() => {}); } catch { /* disconnected context: keep local layout */ }
   }
 
   function start(event, kind) {
@@ -125,14 +125,14 @@ export async function attachPanelLayout(panel, { onReset = () => {} } = {}) {
   }
   window.addEventListener('resize', apply);
   document.addEventListener('fullscreenchange', apply);
-  chrome.storage.onChanged.addListener((changes, area) => {
+  try { chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local' || gesture || (!changes.panelLayout && !changes.panelLayoutReset)) return;
     layout = changes.panelLayout ? validLayout(changes.panelLayout.newValue) : layout;
     if (changes.panelLayoutReset || changes.panelLayout?.newValue === null) {
       layout = null; startupDocked = false; panel.classList.remove('collapsed'); onReset();
     }
     apply();
-  });
+  }); } catch { /* layout remains usable until the page is reloaded */ }
   apply();
   return {
     setCollapsed(collapsed) {

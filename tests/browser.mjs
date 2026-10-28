@@ -426,6 +426,7 @@ try {
   assert(Math.abs((await sf('.panel').boundingBox()).x - (larger.x + 10)) < 2);
   await sf('.resize-handle').focus(); await page.keyboard.press('ArrowLeft');
   assert(Math.abs((await sf('.panel').boundingBox()).width - (larger.width - 10)) < 2);
+  await sf('.appearance-options').evaluate(el => el.open = true);
   await sf('.reset-layout').click();
   assert.equal(await sf('.panel').evaluate(el => el.style.width), '');
   await dragPanel(-300, 0); await sf('.collapse').click();

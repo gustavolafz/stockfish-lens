@@ -84,7 +84,8 @@ try {
   assert(await sf('.refresh').isEnabled());
   await sf('.refresh').click();
   await page.waitForFunction(() => document.querySelector('#stockfish-lens').shadowRoot.querySelector('.panel').dataset.state === 'searching');
-  assert(await sf('.refresh').isDisabled()); assert(await sf('.toggle').isEnabled());
+  assert(await sf('.refresh').isEnabled()); assert.equal(await sf('.refresh').textContent(), 'Reiniciar motor');
+  assert(await sf('.toggle').isEnabled());
   await ready(); assert(await sf('.refresh').isEnabled());
   console.log('PASS: inline FEN validation preserves current analysis, explicit manual position and pause/search/ready feedback');
 

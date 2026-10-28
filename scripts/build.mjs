@@ -8,12 +8,12 @@ await mkdir('dist/engine', { recursive: true });
 await mkdir('dist/licenses', { recursive: true });
 await mkdir('dist/fonts', { recursive: true });
 await Promise.all([
-  build({ entryPoints: ['src/content.js', 'src/engine.js', 'src/popup.js'], bundle: true,
+  build({ entryPoints: ['src/content.js', 'src/engine.js', 'src/popup.js', 'src/offscreen.js'], bundle: true,
     outdir: 'dist', format: 'iife', target: 'chrome110', legalComments: 'eof', loader: { '.css': 'text' } }),
   build({ entryPoints: ['src/background.js'], bundle: true,
     outdir: 'dist', format: 'iife', globalName: 'StockfishLensCommands', target: 'chrome110', legalComments: 'eof' })
 ]);
-for (const name of ['manifest.json', 'engine.html', 'popup.html', 'popup.css', 'theme.css']) {
+for (const name of ['manifest.json', 'engine.html', 'offscreen.html', 'popup.html', 'popup.css', 'theme.css']) {
   await cp(name, `dist/${name}`);
 }
 await cp('assets/icons', 'dist/icons', { recursive: true });
@@ -23,7 +23,8 @@ if (!loader) throw new Error('Build lite-single do Stockfish não encontrado.');
 await cp(`node_modules/stockfish/bin/${loader}`, `dist/engine/${loader}`);
 await cp(`node_modules/stockfish/bin/${loader.replace(/\.js$/, '.wasm')}`,
   `dist/engine/${loader.replace(/\.js$/, '.wasm')}`);
-await writeFile('dist/engine-config.json', JSON.stringify({ loader: `engine/${loader}` }));
+const { version } = JSON.parse(await readFile('package.json', 'utf8'));
+await writeFile('dist/engine-config.json', JSON.stringify({ loader: `engine/${loader}`, version }));
 await cp('LICENSE', 'dist/licenses/GPL-3.0.txt');
 await cp('assets/engine/CC0-1.0.txt', 'dist/licenses/NNUE-CC0-1.0.txt');
 await cp('node_modules/chess.js/LICENSE', 'dist/licenses/chess.js-LICENSE');
@@ -36,7 +37,6 @@ for (const [pkg, file, name] of [
   await cp(`node_modules/${pkg}/files/${file}`, `dist/fonts/${name}.woff2`);
   await cp(`node_modules/${pkg}/LICENSE`, `dist/licenses/${name}-OFL.txt`);
 }
-const { version } = JSON.parse(await readFile('package.json', 'utf8'));
 const engineFiles = [loader, loader.replace(/\.js$/, '.wasm')];
 await writeFile('dist/BUILD-INFO.json', JSON.stringify({ extensionVersion: version,
   enginePackage: 'stockfish@19.0.1', engineVariant: 'lite-single',

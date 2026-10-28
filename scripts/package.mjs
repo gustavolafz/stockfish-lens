@@ -22,7 +22,7 @@ await writeFile(`release/${install}`, zipSync(await collect('dist')));
 const source = {};
 for (const directory of ['src', 'scripts', 'tests', 'assets', 'docs', '.github', 'vendor'])
   Object.assign(source, await collect(directory, `stockfish-lens/${directory}/`));
-for (const file of ['package.json', 'package-lock.json', 'manifest.json', 'popup.html', 'popup.css', 'theme.css', 'engine.html',
+for (const file of ['package.json', 'package-lock.json', 'manifest.json', 'popup.html', 'popup.css', 'theme.css', 'engine.html', 'offscreen.html',
   'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'PRIVACY.md', 'LICENSE', 'NOTICE.txt', 'AGENTS.md', '.gitignore', '.gitmodules', '.gitattributes', '.nvmrc'])
   source[`stockfish-lens/${file}`] = new Uint8Array(await readFile(file));
 await writeFile(`release/${sourceName}`, zipSync(source));

@@ -23,6 +23,14 @@ A rede lite está incluída em `assets/engine/`, com o nome que contém o prefix
 
 ## Fontes e licenças
 
-O ZIP completo de fontes da release inclui o código da extensão, o conteúdo do submódulo, a rede lite e os scripts. O ZIP automático **Source code** gerado pelo GitHub não inclui o conteúdo de submódulos; use o pacote `stockfish-lens-1.1.0-source.zip` ou um clone com `--recurse-submodules`.
+O ZIP completo de fontes da release inclui o código da extensão, o conteúdo do submódulo, a rede lite e os scripts. O ZIP automático **Source code** gerado pelo GitHub não inclui o conteúdo de submódulos; use o pacote `stockfish-lens-1.1.2-source.zip` ou um clone com `--recurse-submodules`.
 
 O motor é GPL-3.0; a rede NNUE do arquivo oficial é CC0-1.0, com o texto preservado em `assets/engine/CC0-1.0.txt`. Os arquivos do upstream são mantidos sem alteração. As fontes tipográficas e chess.js têm licenças próprias preservadas no pacote. Consulte [NOTICE.txt](../NOTICE.txt) e [LICENSE](../LICENSE).
+
+## Alternativa de execução interna
+
+Quando a criação do Worker na iframe do site falha com um evento sem mensagem técnica, o painel solicita ao service worker um documento `offscreen.html`, com a razão `WORKERS`. O painel conecta-se diretamente a esse documento por `runtime.Port`; o service worker não permanece como intermediário. Cada conexão usa uma iframe `engine.html` e um Worker próprios, removidos quando a conexão termina.
+
+O mesmo motor e os mesmos comandos UCI são usados nos dois caminhos. O worker não depende de APIs de extensão: a versão vem de `engine-config.json`, e o log continua no painel. `storage` e `offscreen` são as permissões declaradas; não é necessário acesso a outros sites.
+
+O painel limita a espera de cada inicialização a 15 segundos, independentemente dos temporizadores do motor. O esgotamento na iframe ativa a alternativa interna; o esgotamento interno encerra a conexão e oferece uma nova tentativa. Pesquisas têm um prazo adicional de 10 segundos além do tempo configurado. Pausar e reiniciar invalidam os temporizadores e conexões anteriores. Uma recarga da extensão exige uma nova página; esse estado é detectado e apresentado com uma ação explícita de atualização.

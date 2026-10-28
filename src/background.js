@@ -1,3 +1,4 @@
+import './engine-host.js';
 import { DEFAULTS, normalizeSettings } from './settings.js';
 import { shortcutPatch } from './shortcuts.js';
 

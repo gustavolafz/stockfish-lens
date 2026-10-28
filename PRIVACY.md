@@ -14,6 +14,8 @@ O log UCI permanece na memória da página, com até 3.000 mensagens. Ele só é
 
 ## Permissões e rede
 
-O manifesto solicita `storage` e injeta o conteúdo nas páginas de `chess.com` e `www.chess.com`. A extensão não pede acesso ao histórico de navegação, cookies, credenciais ou a outros sites. Abrir a página de atalhos do Chrome usa a API de abas sem solicitar leitura das abas.
+O manifesto solicita `storage` e `offscreen` e injeta o conteúdo nas páginas de `chess.com` e `www.chess.com`. A extensão não pede acesso ao histórico de navegação, cookies, credenciais ou a outros sites. Abrir a página de atalhos do Chrome usa a API de abas sem solicitar leitura das abas.
+
+A permissão `offscreen` permite executar o motor em um documento interno oculto quando ele não inicia na iframe do site. A conexão é separada por aba e encerrada quando a página é fechada. Não abre abas nem janelas de análise.
 
 JavaScript, WASM, fontes e ícones usados na análise são empacotados na extensão. A instalação das dependências de desenvolvimento usa npm; isso é separado da análise no navegador. O tráfego normal do site Chess.com continua sob responsabilidade do próprio site.

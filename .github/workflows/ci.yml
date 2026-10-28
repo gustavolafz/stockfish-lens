@@ -23,6 +23,8 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:browser
+      - run: npm run test:engine
+      - run: npm run test:lifecycle
       - run: npm run test:ux
       - run: npm run package
       - run: npm run verify:package

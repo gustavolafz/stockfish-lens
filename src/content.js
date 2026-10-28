@@ -11,10 +11,15 @@ import css from './panel.css';
 if (!document.getElementById('stockfish-lens')) main();
 
 async function main() {
+  const extensionId = chrome.runtime.id;
+  const extensionBase = chrome.runtime.getURL('/');
+  const extensionOrigin = new URL(extensionBase).origin;
+  const extensionVersion = chrome.runtime.getManifest().version;
+  const resourceURL = path => new URL(path, extensionBase).href;
   let settings = { ...DEFAULTS };
   try { settings = normalizeSettings(await chrome.storage.local.get(DEFAULTS)); } catch { /* defaults */ }
   for (const [name, file, weight] of [['SFManrope', 'Manrope', '200 800'], ['SFLora', 'Lora', '500'], ['SFChess', 'ChessSymbols', '400']]) {
-    const face = new FontFace(name, `url("${chrome.runtime.getURL(`fonts/${file}.woff2`)}")`, { weight });
+    const face = new FontFace(name, `url("${resourceURL(`fonts/${file}.woff2`)}")`, { weight });
     document.fonts.add(face);
     face.load().catch(() => {});
   }
@@ -28,7 +33,7 @@ async function main() {
       ${[3, 2, 1].map(rank => `<g class="arrow-group rank-${rank}" data-rank="${rank}"><line class="${rank === 1 ? 'arrow' : 'variant-arrow'}" marker-end="url(#sf-arrow-head-${rank})"/><text class="arrow-label" text-anchor="middle" dominant-baseline="central">${rank}</text></g>`).join('')}
     </svg></svg>
     <section class="panel collapsed" aria-label="Stockfish Lens">
-      <header><div><span class="logo">♞</span><strong>Stockfish <span>Lens</span></strong></div><div class="header-actions"><button class="reset-layout" title="Restaurar posição e tamanho" aria-label="Restaurar posição e tamanho">↺</button><button class="collapse" title="Expandir painel" aria-expanded="false">+</button></div></header>
+      <header><div><span class="logo">♞</span><strong>Stockfish <span>Lens</span></strong></div><div class="header-actions"><button class="restart-engine" title="Reiniciar motor" aria-label="Reiniciar motor">↻</button><button class="collapse" title="Expandir painel" aria-expanded="false">+</button></div></header>
       <div class="body">
         <section class="best-card" aria-label="Melhor lance">
         <div class="source-row"><div class="eyebrow">O STOCKFISH JOGARIA</div><span class="source-badge">Tabuleiro</span></div>
@@ -47,6 +52,7 @@ async function main() {
           <p class="metrics-empty section-note">Os dados aparecem quando o motor começa a pesquisar.</p><dl class="metrics"></dl><div class="wdl"></div><p class="ponder"></p>
         </details>
         <details class="appearance-options"><summary><h2>Aparência</h2></summary>
+          <button class="reset-layout" type="button">Restaurar posição e tamanho</button>
           <div class="font-control"><label for="sf-font-scale">Tamanho das fontes</label>
             <select id="sf-font-scale" aria-describedby="sf-font-scale-hint">${FONT_SCALES.map(size => `<option value="${size}">${size}%${size === 100 ? ' (padrão)' : size === 80 ? ' (menor)' : size === 150 ? ' (maior)' : ''}</option>`).join('')}</select>
             <p id="sf-font-scale-hint" class="field-hint">Ajusta todos os textos do painel e do popup, incluindo os lances.</p>
@@ -80,7 +86,7 @@ async function main() {
           <div class="protocol-actions"><button class="export-log" type="button">Baixar log (.txt)</button></div>
           <pre class="uci-log"></pre>
         </details>
-        <footer><span>Lens ${chrome.runtime.getManifest().version}</span><span>Stockfish 19 · local</span></footer>
+        <footer><span>Lens ${extensionVersion}</span><span>Stockfish 19 · local</span></footer>
       </div>
       <div class="actionbar"><p class="notice" role="status" aria-live="polite"></p><div class="controls"><button class="toggle" type="button">Pausar</button><button class="refresh primary" type="button">Analisar agora</button></div></div>
       <button class="resize-handle" aria-label="Redimensionar painel" title="Arraste para redimensionar. Com foco, use as setas do teclado."></button>
@@ -97,6 +103,9 @@ async function main() {
   const panelLayout = await attachPanelLayout($('.panel'), { onReset: syncCollapse });
   syncCollapse();
   let board = null, position = null, lastFen = '', manualFen = null, move = null;
+  let contextLost = false, searchTimer;
+  const STARTUP_TIMEOUT = 15000;
+  let enginePort = null, offscreenMode = false, offscreenStarting = false, engineStartTimer, connectionAttempt = 0;
   let frame = null, channel = '', engineReady = false, engineFailed = false, id = 0;
   let timer, animationTimer, previousPlacement = '', stableSince = 0;
   const log = [];
@@ -107,11 +116,15 @@ async function main() {
   function syncActions() {
     const state = $('.panel').dataset.state;
     const busy = settings.enabled && ['loading', 'searching'].includes(state);
-    $('.refresh').disabled = busy || (!position && !engineFailed) || state === 'complete';
-    $('.refresh').textContent = busy ? 'Analisando…' : engineFailed ? 'Tentar novamente' : settings.enabled ? state === 'ready' ? 'Reanalisar' : 'Analisar' : 'Retomar análise';
+    $('.refresh').disabled = !contextLost && ((!position && !engineFailed) || state === 'complete');
+    $('.refresh').textContent = contextLost ? 'Atualizar página' : busy ? 'Reiniciar motor' : engineFailed ? 'Tentar novamente' : settings.enabled ? state === 'ready' ? 'Reanalisar' : 'Analisar' : 'Retomar análise';
+    $('.toggle').disabled = contextLost;
     $('.toggle').textContent = settings.enabled ? 'Pausar' : 'Retomar';
     $('.toggle').setAttribute('aria-label', settings.enabled ? 'Pausar análise' : 'Retomar análise');
     $('.best-card').setAttribute('aria-busy', String(busy));
+    $('.restart-engine').title = contextLost ? 'Atualizar página para reconectar a extensão' : 'Reiniciar motor';
+    $('.restart-engine').setAttribute('aria-label', $('.restart-engine').title);
+    if (contextLost) for (const control of root.querySelectorAll('input, select, textarea, form button')) control.disabled = true;
     $('.copy-fen').disabled = !position || $('.panel').dataset.fen !== position.fen;
     $('.export-log').disabled = log.length === 0;
     $('.automatic').disabled = !manualFen;
@@ -140,7 +153,51 @@ async function main() {
     $('.notice').dataset.error = String(error);
     noticeTimer = setTimeout(() => { $('.notice').textContent = ''; }, 3500);
   }
-  const send = data => frame?.contentWindow?.postMessage({ channel, ...data }, new URL(chrome.runtime.getURL('/')).origin);
+  function runtimeAlive() {
+    try { return chrome.runtime.id === extensionId && Boolean(chrome.runtime.getManifest()); }
+    catch { return false; }
+  }
+  function disposeEngine() {
+    connectionAttempt++;
+    clearTimeout(engineStartTimer); clearTimeout(searchTimer);
+    engineReady = false; offscreenStarting = false;
+    const previous = enginePort; enginePort = null;
+    try { previous?.disconnect(); } catch { /* already disconnected */ }
+    frame?.remove(); frame = null; channel = '';
+  }
+  function disconnected() {
+    if (contextLost) return;
+    contextLost = true; settings.enabled = false; id++;
+    disposeEngine(); engineFailed = true; lastFen = ''; clearResult();
+    status('A conexão com a extensão foi perdida. Atualize esta página para reconectar.', 'disconnected');
+  }
+  function checkRuntime() {
+    if (contextLost) return false;
+    if (runtimeAlive()) return true;
+    disconnected(); return false;
+  }
+  async function saveSettings(patch) {
+    if (!checkRuntime()) return;
+    const before = settings;
+    settings = normalizeSettings({ ...settings, ...patch });
+    applySettings(['enabled', 'ms', 'multipv'].some(key => settings[key] !== before[key]));
+    if (contextLost) return;
+    try { await chrome.storage.local.set(patch); }
+    catch {
+      if (!runtimeAlive()) disconnected();
+      else notify('A alteração vale nesta aba; não foi possível salvá-la.', true);
+    }
+  }
+  const send = data => {
+    if (!engineReady || !checkRuntime()) return;
+    try {
+      if (enginePort) enginePort.postMessage(data);
+      else frame?.contentWindow?.postMessage({ channel, ...data }, extensionOrigin);
+    } catch (error) {
+      if (!runtimeAlive()) disconnected();
+      else engineError(`A conexão com o motor falhou: ${error.message}. Clique em Reiniciar motor.`);
+    }
+  };
   function renderEvaluationBar(info) {
     const bar = $('.eval-bar');
     const percent = evaluationBarPercent(info);
@@ -155,6 +212,7 @@ async function main() {
     bar.title = `${info.bound ? 'Limite da avaliação' : 'Avaliação'}: ${$('.score').textContent} pelas brancas. Escala visual, não representa chances de vitória.`;
   }
   const clearResult = () => {
+    clearTimeout(searchTimer);
     renderEvaluationBar(null);
     move = null;
     $('.move').textContent = $('.score').textContent = '—';
@@ -169,7 +227,48 @@ async function main() {
     draw();
   };
 
+  function engineError(message) {
+    disposeEngine();
+    engineFailed = true; engineReady = false; offscreenStarting = false;
+    id++; lastFen = ''; clearResult(); status(message, 'error');
+  }
+  function watchStartup(attempt) {
+    clearTimeout(engineStartTimer);
+    engineStartTimer = setTimeout(() => {
+      if (attempt !== connectionAttempt || engineReady || !checkRuntime()) return;
+      if (offscreenMode) engineError('O motor interno não respondeu. Clique em Tentar novamente.');
+      else internalEngine('O motor embutido não iniciou em 15 segundos.');
+    }, STARTUP_TIMEOUT);
+  }
+  async function loadOffscreenEngine() {
+    if (offscreenStarting || (enginePort && !engineFailed)) return;
+    const attempt = ++connectionAttempt;
+    const previous = enginePort; enginePort = null; previous?.disconnect();
+    offscreenStarting = true; engineReady = engineFailed = false;
+    watchStartup(attempt);
+    try {
+      const result = await chrome.runtime.sendMessage({ type: 'ensure-stockfish-host' });
+      if (attempt !== connectionAttempt) return;
+      if (!result?.ok) throw new Error(result?.message || 'Não foi possível abrir o motor interno.');
+      const current = enginePort = chrome.runtime.connect({ name: 'stockfish-engine' });
+      current.onMessage.addListener(data => { if (enginePort === current) handleEngineMessage(data); });
+      current.onDisconnect.addListener(() => {
+        let reason; try { reason = chrome.runtime.lastError?.message; } catch { /* invalidated context */ }
+        if (enginePort !== current) return;
+        if (!runtimeAlive()) { disconnected(); return; }
+        enginePort = null;
+        engineError(reason || 'A conexão com o motor interno foi encerrada. Clique em Tentar novamente.');
+      });
+      handleEngineMessage({ type: 'uci', direction: '!', line: '[motor] Usando documento interno da extensão (offscreen).' });
+    } catch (error) {
+      if (attempt === connectionAttempt) {
+        if (!runtimeAlive()) disconnected();
+        else engineError(`Não foi possível iniciar o motor interno: ${error.message}. Clique em Reiniciar motor.`);
+      }
+    }
+  }
   function loadEngine() {
+    if (offscreenMode) { loadOffscreenEngine(); return; }
     if (frame && !engineFailed) return;
     frame?.remove();
     engineReady = engineFailed = false;
@@ -177,12 +276,28 @@ async function main() {
     frame = document.createElement('iframe');
     frame.hidden = true;
     frame.title = 'Motor Stockfish local';
-    frame.src = chrome.runtime.getURL('engine.html') + '#' + new URLSearchParams({ channel, origin: location.origin });
+    frame.src = resourceURL('engine.html') + '#' + new URLSearchParams({ channel, origin: location.origin });
+    const attempt = ++connectionAttempt;
+    watchStartup(attempt);
+    frame.onerror = () => { if (attempt === connectionAttempt && checkRuntime()) internalEngine('Falha ao carregar a página do motor.'); };
     root.append(frame);
   }
 
+  function internalEngine(reason) {
+    disposeEngine(); offscreenMode = true; engineFailed = false;
+    lastFen = ''; clearResult();
+    handleEngineMessage({ type: 'uci', direction: '!', line: `[motor] ${reason} Tentando documento interno.` });
+    status('Iniciando motor interno da extensão…', 'loading');
+    loadOffscreenEngine();
+  }
+  function restartEngine() {
+    if (!checkRuntime()) { location.reload(); return; }
+    disposeEngine(); engineFailed = false; id++; lastFen = ''; clearResult();
+    if (!settings.enabled) saveSettings({ enabled: true });
+    else scan(true);
+  }
   function analyze(force = false) {
-    if (!settings.enabled) return;
+    if (!settings.enabled || (engineFailed && !force)) return;
     if (!position) return;
     if (!force && lastFen === position.fen) return;
     clearResult();
@@ -194,6 +309,7 @@ async function main() {
     $('.squares').textContent = manualFen ? 'FEN manual' : position.source;
     if (game.isGameOver()) {
       send({ type: 'cancel' });
+      if (contextLost) return;
       $('.move').textContent = game.isCheckmate() ? 'Mate' : 'Empate';
       $('.score').textContent = game.isCheckmate() ? (game.turn() === 'w' ? '−M0' : '+M0') : '0.00';
       renderEvaluationBar({ score: game.isCheckmate() && game.turn() === 'w' ? -0 : 0, mate: game.isCheckmate() });
@@ -204,6 +320,11 @@ async function main() {
     if (!engineReady) { status('Carregando Stockfish local…', 'loading'); return; }
     analysis = new SearchAnalysis(position.fen);
     status(`Analisando · ${(settings.ms / 1000).toLocaleString('pt-BR')} s`, 'searching');
+    const request = id;
+    searchTimer = setTimeout(() => {
+      if (id === request && settings.enabled && checkRuntime())
+        engineError('A análise não terminou no tempo esperado. Clique em Reiniciar motor.');
+    }, settings.ms + 10000);
     send({ type: 'analyze', id, fen: position.fen, moves: position.moves, ms: settings.ms, multipv: settings.multipv });
   }
 
@@ -245,6 +366,8 @@ async function main() {
 
   const resizeObserver = new ResizeObserver(draw);
   function scan(force = false) {
+    if (!checkRuntime()) return;
+    if (engineFailed && !force) return;
     clearTimeout(animationTimer);
     const next = [...document.querySelectorAll(BOARD_SELECTOR)].find(el => el.getBoundingClientRect().width > 0) || null;
     if (next !== board) {
@@ -355,8 +478,10 @@ async function main() {
   }
 
   window.addEventListener('message', event => {
-    if (event.source !== frame?.contentWindow || event.origin !== new URL(chrome.runtime.getURL('/')).origin || event.data?.channel !== channel) return;
-    const data = event.data;
+    if (event.source !== frame?.contentWindow || event.origin !== extensionOrigin || event.data?.channel !== channel) return;
+    handleEngineMessage(event.data);
+  });
+  function handleEngineMessage(data) {
     if (data.type === 'uci') {
       log.push(`${new Date().toISOString()} ${data.direction} ${data.line}`);
       $('.export-log').disabled = false;
@@ -367,12 +492,21 @@ async function main() {
       }, 250);
       return;
     }
-    if (data.type === 'ready') { engineReady = true; scan(true); }
-    else if (data.type === 'error') { engineFailed = true; engineReady = false; lastFen = ''; clearResult(); status(data.message, 'error'); }
+    if (data.type === 'ready') { clearTimeout(engineStartTimer); offscreenStarting = false; engineReady = true; engineFailed = false; scan(true); }
+    else if (data.type === 'restarting') {
+      if (engineReady) watchStartup(connectionAttempt);
+      engineReady = false; lastFen = ''; clearResult(); status(data.message, 'loading');
+    }
+    else if (data.type === 'error') {
+      if (data.code === 'worker-load' && !offscreenMode) {
+        internalEngine('O Worker do motor embutido não carregou.');
+      } else engineError(data.message);
+    }
     else if (data.id === id && settings.enabled && position) {
       if (data.type === 'info') {
         if (analysis?.update(data.line)) renderAnalysis();
       } else if (data.type === 'done') {
+        clearTimeout(searchTimer);
         if (!data.move || data.move === '(none)' || data.move === '0000') {
           clearResult(); status('Sem lance legal nesta posição.', 'complete');
         } else if (analysis?.finish(data.move, data.ponder)) {
@@ -383,7 +517,7 @@ async function main() {
         }
       }
     }
-  });
+  }
 
   function applySettings(reanalyze = true) {
     host.style.setProperty('--sf-font-scale', settings.fontScale / 100);
@@ -399,31 +533,41 @@ async function main() {
     syncActions();
     if (!reanalyze) { draw(); return; }
     id++; lastFen = ''; clearResult(); send({ type: 'cancel' });
-    if (!settings.enabled) status('Análise pausada.', 'paused');
+    if (contextLost) return;
+    if (!settings.enabled) { disposeEngine(); status('Análise pausada.', 'paused'); }
     else scan(true);
   }
   $('.collapse').onclick = () => {
     panelLayout.setCollapsed(!$('.panel').classList.contains('collapsed'));
     syncCollapse();
   };
-  $('.reset-layout').onclick = async () => { await panelLayout.reset(); notify('Posição e tamanho restaurados.'); };
-  $('.toggle').onclick = () => chrome.storage.local.set({ enabled: !settings.enabled });
-  $('[data-notation-setting="showPieceLetters"]').onchange = event => chrome.storage.local.set({ showPieceLetters: event.target.checked });
-  $('#sf-font-scale').onchange = event => chrome.storage.local.set({ fontScale: Number(event.target.value) });
-  $('#sf-arrow-scale').onchange = event => chrome.storage.local.set({ arrowScale: Number(event.target.value) });
-  $('[data-filter-setting="hideUnfavorableArrows"]').onchange = event => chrome.storage.local.set({ hideUnfavorableArrows: event.target.checked });
+  $('.reset-layout').onclick = async () => {
+    try { await panelLayout.reset(); notify('Posição e tamanho restaurados.'); }
+    catch { if (!runtimeAlive()) disconnected(); else notify('Layout restaurado nesta aba.', true); }
+  };
+  $('.restart-engine').onclick = restartEngine;
+  $('.toggle').onclick = () => saveSettings({ enabled: !settings.enabled });
+  $('[data-notation-setting="showPieceLetters"]').onchange = event => saveSettings({ showPieceLetters: event.target.checked });
+  $('#sf-font-scale').onchange = event => saveSettings({ fontScale: Number(event.target.value) });
+  $('#sf-arrow-scale').onchange = event => saveSettings({ arrowScale: Number(event.target.value) });
+  $('[data-filter-setting="hideUnfavorableArrows"]').onchange = event => saveSettings({ hideUnfavorableArrows: event.target.checked });
   for (const input of root.querySelectorAll('[data-setting]')) {
-    input.onchange = () => chrome.storage.local.set(arrowPreference(settings, input.dataset.setting, input.checked));
+    input.onchange = () => saveSettings(arrowPreference(settings, input.dataset.setting, input.checked));
   }
-  $('.refresh').onclick = () => { if (!settings.enabled) chrome.storage.local.set({ enabled: true }); else scan(true); };
+  $('.refresh').onclick = () => {
+    if (!checkRuntime()) { location.reload(); return; }
+    if (['loading', 'searching'].includes($('.panel').dataset.state) || engineFailed) restartEngine();
+    else if (!settings.enabled) saveSettings({ enabled: true });
+    else scan(true);
+  };
   $('form').onsubmit = event => {
     event.preventDefault();
     try {
       const game = new Chess($('#sf-fen').value.trim());
       $('#sf-fen-error').textContent = ''; $('#sf-fen').removeAttribute('aria-invalid');
       manualFen = game.fen(); lastFen = ''; id++; send({ type: 'cancel' }); clearResult();
-      if (!settings.enabled) chrome.storage.local.set({ enabled: true });
-      scan(true);
+      if (!settings.enabled) saveSettings({ enabled: true });
+      else scan(true);
     } catch { $('#sf-fen-error').textContent = 'FEN inválido. Confira os seis campos, os reis e a vez de jogar.'; $('#sf-fen').setAttribute('aria-invalid', 'true'); $('#sf-fen').focus(); }
   };
   $('#sf-fen').oninput = () => { $('#sf-fen-error').textContent = ''; $('#sf-fen').removeAttribute('aria-invalid'); };
@@ -442,12 +586,18 @@ async function main() {
     try { await navigator.clipboard.writeText(position.fen); notify('FEN copiado.'); }
     catch { $('#sf-fen').value = position.fen; $('details:has(form)').open = true; $('#sf-fen').select(); notify('Selecione e copie o FEN no campo de posição.'); }
   };
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== 'local') return;
-    for (const key of Object.keys(DEFAULTS)) if (changes[key]) settings[key] = changes[key].newValue ?? DEFAULTS[key];
-    settings = normalizeSettings(settings);
-    applySettings(['enabled', 'ms', 'multipv'].some(key => changes[key]));
-  });
+  try {
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'local' || contextLost) return;
+      const next = { ...settings };
+      for (const key of Object.keys(DEFAULTS)) if (changes[key]) next[key] = changes[key].newValue ?? DEFAULTS[key];
+      const normalized = normalizeSettings(next);
+      const changed = Object.keys(DEFAULTS).filter(key => normalized[key] !== settings[key]);
+      if (!changed.length) return;
+      settings = normalized;
+      applySettings(changed.some(key => ['enabled', 'ms', 'multipv'].includes(key)));
+    });
+  } catch { disconnected(); }
   new MutationObserver(records => {
     // Ignore clock tick text and our own panel. Do not postpone indefinitely on frequent updates.
     const relevant = records.some(record => !host.contains(record.target) &&
@@ -464,5 +614,5 @@ async function main() {
   });
   // Also catches SPA route changes and lazy mounting without a page reload.
   setInterval(() => { if (!host.isConnected) document.documentElement.append(host); scan(); }, 1500);
-  applySettings();
+  if (checkRuntime()) applySettings();
 }
